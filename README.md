@@ -1,2 +1,6 @@
 # hello-world-test
-Static Hello World with main (prod) and dev (preview) Vercel deploys
+
+Static Hello World for a Vercel + GitHub deploy test.
+
+- `main` → production
+- `dev` → preview
