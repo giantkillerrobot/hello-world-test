@@ -44,14 +44,94 @@
       letter-spacing: 0.06em;
       opacity: 0.45;
     }
+    #gate {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      background: #0b1020;
+      z-index: 10;
+    }
+    #gate.hidden { display: none; }
+    #app.hidden { display: none; }
+    .gate-box { text-align: center; padding: 2rem; width: min(22rem, 90vw); }
+    .gate-box h2 {
+      margin: 0 0 1rem;
+      font-size: 1.35rem;
+      letter-spacing: -0.02em;
+    }
+    .gate-box form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .gate-box input {
+      padding: 0.7rem 0.85rem;
+      border: 1px solid #334155;
+      border-radius: 0.5rem;
+      background: #111827;
+      color: #f5f7ff;
+      font-size: 1rem;
+    }
+    .gate-box button {
+      padding: 0.7rem 0.85rem;
+      border: 0;
+      border-radius: 0.5rem;
+      background: #22c55e;
+      color: #052e16;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .error {
+      min-height: 1.25rem;
+      margin: 0.5rem 0 0;
+      color: #f87171;
+      font-size: 0.9rem;
+    }
   </style>
 </head>
 <body>
-  <main>
-    <div class="badge">main · production</div>
-    <h1>Hello World test two</h1>
-    <p>Deployed from the <code>main</code> branch.</p>
-  </main>
-  <div class="version">v1.0.0</div>
+  <div id="gate">
+    <div class="gate-box">
+      <h2>Enter password</h2>
+      <form id="auth-form">
+        <input id="password" type="password" autocomplete="current-password" placeholder="Password" />
+        <button type="submit">Continue</button>
+      </form>
+      <p class="error" id="error"></p>
+    </div>
+  </div>
+  <div id="app" class="hidden">
+    <main>
+      <div class="badge">main · production</div>
+      <h1>Hello World test two</h1>
+      <p>Deployed from the <code>main</code> branch.</p>
+    </main>
+    <div class="version">v1.1.0</div>
+  </div>
+  <script>
+    const KEY = "hw-auth";
+    const gate = document.getElementById("gate");
+    const app = document.getElementById("app");
+    const error = document.getElementById("error");
+
+    function unlock() {
+      gate.classList.add("hidden");
+      app.classList.remove("hidden");
+    }
+
+    if (sessionStorage.getItem(KEY) === "1") unlock();
+
+    document.getElementById("auth-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const value = document.getElementById("password").value;
+      if (value === "helloworld") {
+        sessionStorage.setItem(KEY, "1");
+        unlock();
+      } else {
+        error.textContent = "Wrong password";
+      }
+    });
+  </script>
 </body>
 </html>
