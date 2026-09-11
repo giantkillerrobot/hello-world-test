@@ -34,6 +34,16 @@
       letter-spacing: -0.03em;
     }
     p { margin: 0; opacity: 0.75; font-size: 1.1rem; }
+    .logout {
+      margin-top: 1.5rem;
+      padding: 0.55rem 1rem;
+      border: 1px solid #334155;
+      border-radius: 0.5rem;
+      background: transparent;
+      color: #f5f7ff;
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
     .version {
       position: fixed;
       bottom: 1.25rem;
@@ -106,32 +116,44 @@
       <div class="badge">main · production</div>
       <h1>Hello World test two</h1>
       <p>Deployed from the <code>main</code> branch.</p>
+      <button type="button" class="logout" id="logout">Log out</button>
     </main>
-    <div class="version">v1.1.0</div>
+    <div class="version">v1.1.1</div>
   </div>
   <script>
     const KEY = "hw-auth";
     const gate = document.getElementById("gate");
     const app = document.getElementById("app");
     const error = document.getElementById("error");
+    const password = document.getElementById("password");
 
     function unlock() {
       gate.classList.add("hidden");
       app.classList.remove("hidden");
     }
 
+    function lock() {
+      sessionStorage.removeItem(KEY);
+      password.value = "";
+      error.textContent = "";
+      app.classList.add("hidden");
+      gate.classList.remove("hidden");
+      password.focus();
+    }
+
     if (sessionStorage.getItem(KEY) === "1") unlock();
 
     document.getElementById("auth-form").addEventListener("submit", function (e) {
       e.preventDefault();
-      const value = document.getElementById("password").value;
-      if (value === "helloworld") {
+      if (password.value === "helloworld") {
         sessionStorage.setItem(KEY, "1");
         unlock();
       } else {
         error.textContent = "Wrong password";
       }
     });
+
+    document.getElementById("logout").addEventListener("click", lock);
   </script>
 </body>
 </html>
